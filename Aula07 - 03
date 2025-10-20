@@ -34,5 +34,11 @@ class MainActivity : AppCompatActivity() {
             .setIcon(R.mipmap.ic_launcher)
             .setNeutralButton("OK", null)
             .show()
+
+        //mensagem com obejeto builder
+        var b = AlertDialog.Builder(this)
+        b.setTitle("título")
+        b.setMessage("oi")
+        b.show()
     }
 }
