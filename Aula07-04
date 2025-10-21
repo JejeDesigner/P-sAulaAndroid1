@@ -1,0 +1,54 @@
+package com.example.aula07_03
+
+import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+@Suppress("UNUSED_EXPRESSION")
+class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        //===========================================================
+
+        //Cria o objeto Spinner
+        val spinner = findViewById<Spinner>(R.id.spnEstados)
+
+        //===========================================================
+        //Cria o Objeto Adaptador
+
+        var adapter = ArrayAdapter.createFromResource(this,
+            R.array.estados_array,
+            R.layout.menu_spinner)
+        //===========================================================
+        //Vincular o adaptador ao Spinner
+
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = this
+
+
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        Toast.makeText(this, text: "posição: $p2", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
+    }
+}
