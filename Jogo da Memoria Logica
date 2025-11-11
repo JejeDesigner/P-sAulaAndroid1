@@ -1,0 +1,88 @@
+package com.example.aula7
+
+import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var primeiraImg: ImageView
+    private lateinit var segundaImg: ImageView
+    private var primeiraEscolha = -1
+    private var segundaEscolha = -1
+    private var cartas = IntArray(12)
+    private var jogadas = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        //Definindo as Cartas
+        cartas[0] = android.R.drawable.btn_star
+        cartas[1] = android.R.drawable.btn_star
+        cartas[2] = android.R.drawable.ic_menu_edit
+        cartas[3] = android.R.drawable.ic_menu_edit
+        cartas[4] = android.R.drawable.ic_menu_camera
+        cartas[5] = android.R.drawable.ic_menu_camera
+        cartas[6] = android.R.drawable.ic_menu_call
+        cartas[7] = android.R.drawable.ic_menu_call
+        cartas[8] = android.R.drawable.ic_menu_manage
+        cartas[9] = android.R.drawable.ic_menu_manage
+        cartas[10] = android.R.drawable.ic_menu_myplaces
+        cartas[11] = android.R.drawable.ic_menu_myplaces
+
+        // Embaralha
+        cartas.shuffle()
+
+        fun play(view: View){
+            //Armazena a img escolhida
+            val img = findViewById<ImageView>(view.id)
+            if(!img.isEnabled) //ignora clicks em cartas viradas
+                return
+
+            //verifica a carta escolhida
+            val escolha = view.tag.toString().toInt()
+
+            //mostra a carta
+            img.setImageResource(cartas[escolha])
+
+            //atualiza o score
+            title = "${getString(R.string.app_name)} - jogadas: ${++jogadas}"
+
+            //Na terceira escolha, verifica o resultado
+            if (primeiraEscolha != -1 && segundaEscolha != -1){
+                //Verifica se acertou
+                if(cartas[primeiraEscolha] != cartas[segundaEscolha]){
+                    //verifica se errou
+                    primeiraImg.setImageResource(android.R.drawable.ic_menu_help)
+                    segundaImg.setImageResource(android.R.drawable.ic_menu_help)
+                    primeiraImg.isEnabled = true
+                    segundaImg.isEnabled = true
+                }
+                primeiraEscolha = -1
+                segundaEscolha = -1
+            }
+
+            //Primeira e Segunda Escolhas
+            if (primeiraEscolha == -1){
+                primeiraEscolha = escolha
+                primeiraImg = img
+                primeiraImg.isEnabled = false
+            }
+            else{
+                segundaEscolha = escolha
+                segundaImg = img
+                segundaImg.isEnabled = false
+            }
+        }
+    }
+}
