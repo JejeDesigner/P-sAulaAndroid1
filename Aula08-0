@@ -1,0 +1,42 @@
+package com.example.aula08
+
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.aula08.R.id.meuLayout
+import com.google.android.material.snackbar.Snackbar
+
+class MainActivity : AppCompatActivity() {
+    @SuppressLint("MissingInflatedId")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        //Cria um Objeto representando o layout da tela
+        var meuLayout = findViewById<ConstraintLayout>(meuLayout)
+        //define um evento ao clicar no Layout (qualquer parte da tela)
+        meuLayout.setOnClickListener { view ->
+            //Cria um objeto que representa o TextView da tela
+            var rotulo = findViewById<TextView>(R.id.textView)
+            //Mostra um Snockbar curto
+            Snackbar.make(view, "Mensagem", Snackbar.LENGTH_SHORT).show()
+            //Mostra um Snockbar longo
+            Snackbar.make(view, "Mensagem", Snackbar.LENGTH_LONG).show()
+            //Mostra um Snackbar de Fechar.
+            var s = Snackbar.make(view, rotulo.text, Snackbar.LENGTH_INDEFINITE)
+            s.setAction("Fechar", {s.dismiss()}) //Define a ação de Fechar.
+            s.show()
+
+        }
+    }
+}
